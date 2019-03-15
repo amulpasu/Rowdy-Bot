@@ -1,5 +1,5 @@
 import tweepy, time
-from credentials import *
+#from credentials import *
 
 from os import environ
 CONSUMER_KEY = environ['CONSUMER_KEY']
