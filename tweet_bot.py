@@ -1,5 +1,5 @@
-import tweepy, time
-#from credentials import *
+import tweepy
+import time
 
 from os import environ
 consumer_key = environ['TWITTER_CONSUMER_KEY']
@@ -14,5 +14,11 @@ api = tweepy.API(auth)
 search = 'list:Rowdy_Bot/DVS include:nativeretweets'
 
 for tweet in tweepy.Cursor(api.search, search).items():
-    tweet.retweet()
-    time.sleep(600)
+    try:
+        tweet.retweet()
+        time.sleep(600)
+    except tweepy.TweepError:
+        time.sleep(600)
+        continue
+    except StopIteration:
+        break
