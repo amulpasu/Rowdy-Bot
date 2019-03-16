@@ -13,7 +13,7 @@ api = tweepy.API(auth)
 
 search = 'list:Rowdy_Bot/DVS include:nativeretweets'
 
-for tweet in tweepy.Cursor(api.search, search).items():
+for tweet in tweepy.Cursor(api.search, search, result_type="recent").items():
     try:
         tweet.retweet()
         time.sleep(600)
