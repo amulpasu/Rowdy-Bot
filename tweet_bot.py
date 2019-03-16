@@ -1,5 +1,6 @@
 import tweepy
 import time
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 from os import environ
 consumer_key = environ['TWITTER_CONSUMER_KEY']
@@ -11,14 +12,21 @@ auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
-search = 'list:Rowdy_Bot/DVS include:nativeretweets'
+search = 'list:Rowdy_Bot/dvs include:nativeretweets'
 
-for tweet in tweepy.Cursor(api.search, search, result_type="recent").items():
-    try:
-        tweet.retweet()
-        time.sleep(600)
-    except tweepy.TweepError:
-        time.sleep(600)
-        continue
-    except StopIteration:
-        break
+
+def dvs_list():
+    for tweet in tweepy.Cursor(api.search, search, result_type="recent").items(4):
+        try:
+            tweet.retweet()
+            time.sleep(600)
+        except tweepy.TweepError:
+            time.sleep(600)
+            continue
+        except StopIteration:
+            break
+
+
+scheduler = BlockingScheduler()
+scheduler.add_job(dvs_list, 'interval', hours=1)
+scheduler.start()
